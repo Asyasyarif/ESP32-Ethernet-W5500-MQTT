@@ -12,7 +12,7 @@
 #define MQTT_HOSTNAME           "broker.emqx.io"
 #define MQTT_PORT               1883
 
-#define MQTT_PUBLISH_INTERVAL_MS   1000
+#define MQTT_PUBLISH_INTERVAL_MS   5000
 
 IPAddress ipAddress;
 PubSubClient mqttClient;
@@ -42,18 +42,17 @@ void macCharArrayToBytes(const char* str, byte* bytes) {
 }
 
 void connectEthernet() {
-    // delay(500);
-    // byte* mac = new byte[6];
-    // macCharArrayToBytes(ETHERNET_MAC, mac);
-    // ipAddress.fromString(ETHERNET_IP);
+    delay(500);
     byte* mac = new byte[6];
     macCharArrayToBytes(ETHERNET_MAC, mac);
+    ipAddress.fromString(ETHERNET_IP);
+
     Ethernet.init(ETHERNET_CS_PIN);
     ethernetWizReset(ETHERNET_RESET_PIN);
-  
-    // Serial.println("Starting ETHERNET connection...");
-    Ethernet.begin(mac);
-    // delay(200);
+
+    Serial.println("Starting ETHERNET connection...");
+    Ethernet.begin(mac, ipAddress);
+    delay(200);
 
     Serial.print("Ethernet IP is: ");
     Serial.println(Ethernet.localIP());
